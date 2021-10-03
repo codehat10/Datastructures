@@ -115,6 +115,16 @@ void main()
     }
     printf("Enter 1:FirstFit 2:BestFit 3:WorstFit\n");
     scanf("%d",&choice);
- 
+ switch(choice)
+    {
+        case 1 :firstfit( b,f, nb, nf);
+                break;
+        case 2 :bestfit(b, f, nb,nf);
+                break;
+        case 3 :worstfit(b, f, nb, nf);
+                break;      
+        default :printf("Wrong input");
+                break;
+    }
     return;
 }
