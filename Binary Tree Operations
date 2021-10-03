@@ -1,0 +1,275 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+typedef struct treeNode
+{
+    int data;
+    struct treeNode *left;
+    struct treeNode *right;
+} treeNode;
+
+void inorder(treeNode *root)
+{
+    treeNode *ptr = root;
+    if (ptr != NULL)
+    {
+        inorder(ptr->left);
+        printf("%d ", ptr->data);
+        inorder(ptr->right);
+    }
+}
+
+void postorder(treeNode *node)
+{
+    treeNode *ptr = node;
+    if (ptr != NULL)
+    {
+        postorder(ptr->left);
+        postorder(ptr->right);
+        printf("%d ", ptr->data);
+    }
+}
+
+void preorder(treeNode *node)
+{
+    treeNode *ptr = node;
+    if (ptr != NULL)
+    {
+        printf("%d ", ptr->data);
+        preorder(ptr->left);
+        preorder(ptr->right);
+    }
+}
+
+treeNode *search_link(treeNode *root, int key)
+{
+    treeNode *ptr = root;
+    treeNode *ptr1;
+    if (ptr->data != key)
+    {
+        if (ptr->left != NULL)
+        {
+            ptr1 = search_link(ptr->left, key);
+            if (ptr1 == NULL)
+            {
+                if (ptr->right != NULL)
+                {
+                    return search_link(ptr->right, key);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+        else if (ptr->right != NULL)
+        {
+            return search_link(ptr->right, key);
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        return ptr;
+    }
+}
+
+treeNode *insertIntoTree(treeNode *root, int key, int item)
+{
+    if (root == NULL)
+    {
+        treeNode *new = (treeNode *)malloc(sizeof(treeNode));
+        new->data = item;
+        new->left = NULL;
+        new->right = NULL;
+        return new;
+    }
+    treeNode *ptr = search_link(root, key);
+    if (ptr == NULL)
+    {
+        printf("Search Unsuccesfull !!\n");
+        return root;
+    }
+    if ((ptr->left == NULL) || (ptr->right == NULL))
+    {
+        char opt;
+        printf("Insert at L or R: ");
+        scanf(" %c", &opt);
+        if (opt == 'L')
+        {
+            if (ptr->left == NULL)
+            {
+                treeNode *new = (treeNode *)malloc(sizeof(treeNode));
+                new->data = item;
+                new->left = NULL;
+                new->right = NULL;
+                ptr->left = new;
+                return root;
+            }
+            else
+            {
+                printf("Insertion at left not possible !!\n");
+                return root;
+            }
+        }
+        else if (opt == 'R')
+        {
+            if (ptr->right == NULL)
+            {
+                treeNode *new = (treeNode *)malloc(sizeof(treeNode));
+                new->data = item;
+                new->left = NULL;
+                new->right = NULL;
+                ptr->right = new;
+                return root;
+            }
+            else
+            {
+                printf("Insertion at right not possible !\n");
+                return root;
+            }
+        }
+        else
+        {
+            printf("Invalid option\n");
+            return root;
+        }
+    }
+    else
+    {
+        printf("Key node already has child !\n");
+        return root;
+    }
+    return root;
+}
+
+treeNode *search_parent(treeNode *ptr, int item, treeNode *prev)
+{
+    static treeNode *parent;
+    if (ptr == NULL)
+    {
+        return NULL;
+    }
+    if (ptr->data == item)
+    {
+        parent = prev;
+        return prev;
+    }
+    else
+    {
+        search_parent(ptr->left, item, ptr);
+        search_parent(ptr->right, item, ptr);
+    }
+    return parent;
+}
+
+treeNode *deleteFromTree(treeNode *root, int item)
+{
+    treeNode *ptr = root;
+    if (ptr == NULL)
+    {
+        printf("Empty tree!!\n");
+        return root;
+    }
+    treeNode *parent = search_parent(root, item, NULL);
+    if (parent != NULL)
+    {
+        treeNode *ptr1 = parent->left;
+        treeNode *ptr2 = parent->right;
+        if ((ptr1 != NULL) && (ptr1->data == item))
+        {
+            if ((ptr1->left == NULL) && (ptr1->right == NULL))
+            {
+                parent->left = NULL;
+                printf("DELETED !!\n");
+            }
+            else
+            {
+                printf("Node is not a leaf node. So no deletion !\n");
+            }
+        }
+        else if ((ptr2 != NULL) && (ptr2->data == item))
+        {
+            if ((ptr2->left == NULL) && (ptr2->right == NULL))
+            {
+                parent->right = NULL;
+                printf("DELETED !!\n");
+            }
+            else
+            {
+                printf("Node is not a leaf node. So no deletion !\n");
+            }
+        }
+        else
+        {
+            printf("Node with data %d does not exist !\n", item);
+        }
+    }
+    else
+    {
+        printf("Node with data %d does not exist !\n", item);
+    }
+    return root;
+}
+
+int main()
+{
+
+    treeNode *root;
+    root = NULL;
+    int opt, key, item;
+    printf("1. Insert 2. Delete 3. Inorder 4. Preorder 5. Postorder 6. Quit\n");
+    do
+    {
+        printf("Enter option: ");
+        scanf("%d", &opt);
+        switch (opt)
+        {
+        case 1:
+            if (root == NULL)
+            {
+                printf("Input root value: ");
+                scanf("%d", &item);
+                root = insertIntoTree(root, 0, item);
+            }
+            else
+            {
+                printf("Enter data to be inserted and key after which it should be inserted: ");
+                scanf("%d%d", &item, &key);
+                root = insertIntoTree(root, key, item);
+            }
+            break;
+        case 2:
+            printf("Enter data to be deleted: ");
+            scanf("%d", &key);
+            root = deleteFromTree(root, key);
+            break;
+        case 3:
+            printf("Inorder: ");
+            inorder(root);
+            printf("\n");
+            break;
+        case 4:
+            printf("Preorder: ");
+            preorder(root);
+            printf("\n");
+            break;
+        case 5:
+            printf("Postorder: ");
+            postorder(root);
+            printf("\n");
+            break;
+        }
+
+    } while (opt != 6);
+
+    return 0;
+}
