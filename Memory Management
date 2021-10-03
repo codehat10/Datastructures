@@ -1,0 +1,33 @@
+#include<stdio.h>
+#define max 1000
+int frag[max],b[max],f[max],i,j,nb,nf,temp,choice,highest=-1,lowest=9999;
+static int bf[max],ff[max];
+
+
+
+
+
+
+void main()
+{
+    printf("\nEnter the number of blocks:");
+    scanf("%d",&nb);
+    printf("Enter the number of processes:");
+    scanf("%d",&nf);
+    printf("\nEnter the size of the blocks:-\n");
+    for(i=1;i<=nb;i++)
+    {
+        printf("Block %d:",i);
+        scanf("%d",&b[i]);
+    }
+    printf("Enter the size of the processes:-\n");
+    for(i=1;i<=nf;i++)
+    {
+        printf("Process %d:",i);
+        scanf("%d",&f[i]);
+    }
+    printf("Enter 1:FirstFit 2:BestFit 3:WorstFit\n");
+    scanf("%d",&choice);
+ 
+    return;
+}
