@@ -4,7 +4,35 @@ int frag[max],b[max],f[max],i,j,nb,nf,temp,choice,highest=-1,lowest=9999;
 static int bf[max],ff[max];
 
 
-
+void firstfit(int b[max],int f[max],int nb,int nf)
+{
+    for(i=1;i<=nf;i++)
+        {
+            for(j=1;j<=nb;j++)
+            {
+                if(bf[j]!=1)
+                {
+                    temp=b[j]-f[i];
+                    if(temp>=0)
+                    {
+                        ff[i]=j;
+                        break;
+                    }
+                }            
+            }
+        frag[i]=temp;
+        bf[ff[i]]=1;
+        }
+        printf("\nProcess_no:\tProcess_size :\tBlock_no:\tBlock_size:\tFragment");
+        for(i=1;i<=nf;i++)
+            if(frag[i]>-1)
+                printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d",i,f[i],ff[i],b[ff[i]],frag[i]);
+            else
+            {
+                printf("\n%d\t\t%d\t\t not allocated",i,f[i]);
+            }
+            
+}
 
 
 
