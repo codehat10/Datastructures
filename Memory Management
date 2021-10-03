@@ -64,7 +64,37 @@ void bestfit(int b[max],int f[max],int nb,int nf)
                  else
                     printf("\n%d\t\t%d\t\t not allocated",i,f[i]);
 }
-
+void worstfit(int b[max],int f[max],int nb,int nf)
+{
+    for(i=1;i<=nf;i++)
+        {
+            for(j=1;j<=nb;j++)
+            {
+                if(bf[j]!=1) 
+                {
+                    temp=b[j]-f[i];
+                    if(temp>=0)
+                        if(highest<temp)
+                        {
+                            ff[i]=j;
+                            highest=temp;
+                        }
+                }
+            }
+            frag[i]=highest;
+            bf[ff[i]]=1;
+            highest=-1;
+        }
+        printf("\nProcess_no  \tProcess_size  \tBlock_no  \tBlock_size  \tFragment");
+        for(i=1;i<=nf;i++)
+            if(frag[i]>-1)
+                printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d",i,f[i],ff[i],b[ff[i]],frag[i]);
+            else
+            {
+                printf("\n%d\t\t%d\t\t not allocated",i,f[i]);
+            }
+            
+}
 void main()
 {
     printf("\nEnter the number of blocks:");
