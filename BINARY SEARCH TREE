@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    int data;
+    struct node *left;
+    struct node *right;
+}node;
+
+node* insertIntoTree(node* root,int data)
+{
+    if(root==NULL)
+    {
+        root = (node*)malloc(sizeof(node));
+        root->data=data;
+        root->left=root->right=NULL;
+    }
+        
+    else if(data>root->data)
+        root->right=insertIntoTree(root->right,data);
+        
+    else if(data<root->data)
+        root->left=insertIntoTree(root->left,data);       
+        
+    return root;
+}
+
+int leafCount(node *root)
+{
+    if(root==NULL)        
+        return 0; 
+    if(root->left==NULL&&root->right==NULL)
+        return 1;
+    else
+        return leafCount(root->left)+leafCount(root->right);
+}
+
+
+void main()
+{
+    node* root;
+    root = NULL;
+    int N,data,leaf;
+
+    printf("Enter the value of N:");
+    scanf("%d",&N);
+    printf("Enter the numbers:");
+    
+    for(int i=0;i<N;++i)
+    {
+        scanf("%d",&data);
+        root = insertIntoTree(root,data);
+    }
+
+    leaf = leafCount(root);
+    printf("\nNumber of leaf nodes: %d",leaf);
+    printf("\nNumbers in sorted order: ");
+    sort(root);
+    printf("\n");
+}
