@@ -36,7 +36,15 @@ int leafCount(node *root)
         return leafCount(root->left)+leafCount(root->right);
 }
 
-
+void sort(node *root) 
+{
+    if(root!=NULL) 
+    {
+        sort(root->left);
+        printf("%d ",root->data);        
+        sort(root->right);
+    }
+} 
 void main()
 {
     node* root;
